@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2021.11
+BUILDROOT_VERSION=2022.02
 BUILDROOT_EXTERNAL=buildroot-external
 BUILDROOT_PATCH=buildroot-patches
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
@@ -91,9 +91,13 @@ savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(TARGET)
 #   busybox-update-config
 #   uboot-menuconfig
 #   uboot-update-defconfig
-linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig:
+linux-menuconfig linux-update-defconfig \
+busybox-menuconfig busybox-update-config \
+uboot-menuconfig uboot-update-defconfig \
+graph-build graph-depends graph-size\
+manual list-defconfigs legal-info:
 	@$(call MESSAGE,"make $@ to $(TARGET)")
-	@$(MAKE) -C build-$(TARGET) TARGET=$(TARGET) PRODUCT_VERSION=$(PRODUCT_VERSION) $@
+	@$(MAKE) -C build-$(TARGET) TARGET=$(TARGET) PRODUCT_VERSION=$(PRODUCT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) $@
 
 help:
 	@echo "Raspberry Pi Real Time OS Builder"

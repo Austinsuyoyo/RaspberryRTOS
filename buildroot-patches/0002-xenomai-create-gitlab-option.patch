@@ -1,0 +1,31 @@
+
+--- buildroot/package/xenomai/Config.in.orig
++++ buildroot/package/xenomai/Config.in
+@@ -62,7 +62,10 @@ config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
+ 
+ config BR2_PACKAGE_XENOMAI_CUSTOM_GIT
+ 	bool "Custom Git repository"
+-
++	
++config BR2_PACKAGE_XENOMAI_GITLAB
++	bool "Custom Gitlab repository from https://source.denx.de/Xenomai"
++	
+ endchoice
+ 
+ config BR2_PACKAGE_XENOMAI_REPOSITORY
+
+
+--- buildroot/package/xenomai/xenomai.mk.orig
++++ buildroot/package/xenomai/xenomai.mk
+@@ -5,7 +5,10 @@
+ ################################################################################
+ 
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+-ifeq ($(BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL),y)
++ifeq ($(BR2_PACKAGE_XENOMAI_GITLAB),y)
++XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
++XENOMAI_SITE = https://source.denx.de/Xenomai/xenomai/-/archive/$(XENOMAI_VERSION)
++else ifeq ($(BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL),y)
+ XENOMAI_TARBALL = $(call qstrip,$(BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL))
+ XENOMAI_SOURCE = $(notdir $(XENOMAI_TARBALL))
+ XENOMAI_SITE = $(patsubst %/,%,$(dir $(XENOMAI_TARBALL)))
