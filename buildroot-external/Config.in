@@ -1,2 +1,5 @@
-comment "I'm Austinsuyoyo"
+comment "Author: Austinsuyoyo"
 
+menu "EtherCAT application"
+source "$BR2_EXTERNAL_RTRPI_PATH/package/igh/Config.in"
+endmenu

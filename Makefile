@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2022.02
+BUILDROOT_VERSION=2022.02.2
 BUILDROOT_EXTERNAL=buildroot-external
 BUILDROOT_PATCH=buildroot-patches
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
@@ -15,6 +15,13 @@ MESSAGE = echo "$(TERM_BOLD)>>>   $(call qstrip,$(1))$(TERM_RESET)"
 TERM_BOLD := $(shell tput smso 2>/dev/null)
 TERM_UNSERLINE := $(shell tput smul 2>/dev/null)
 TERM_RESET := $(shell tput rmso 2>/dev/null)
+
+# Needed for the foreach loops to loop over the list of hooks, so that
+# each hook call is properly separated by a newline.
+define sep
+
+
+endef
 
 ifneq ($(TARGET),)
 	TARGETS:=$(TARGET)
@@ -111,4 +118,6 @@ help:
 	@echo
 	@echo "  $(MAKE) distclean: clean everything (all build dirs and buildroot sources)"
 	@echo
-	@echo "Supported products: $(TARGETS)"
+	@echo "Supported products: "
+	$(foreach p,$(TARGETS), \
+		@echo '   '$(p)$(sep))
